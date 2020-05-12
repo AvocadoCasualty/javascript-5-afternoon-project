@@ -153,7 +153,7 @@ var module = (function() {
   // outside our lexical scope
   return {
     publicMethod: function () {
-      privateMethod()
+      return privateMethod()
     }
   };
 })();
@@ -173,7 +173,12 @@ function secretNumber() {
   var secret = 143;
 
   return {
-    // Code here
+    addToSecret: function (para) {
+      return secret += para
+    },
+    takeAwayFromSecret: function (para) {
+      return secret -= para
+    }
   };
 }
 
@@ -199,9 +204,15 @@ function secretNumber() {
 
 function timeOutCounter() {
   for (var i = 0; i <= 5; i++) {
-    setTimeout(function() {
-      console.log(i);
-    }, i * 1000);
+    var outer = function () {
+      var number = i
+      var inner = function () {
+        console.log(number);
+      }
+      setTimeout(inner, number * 1000);
+    }
+    outer()
   }
 }
+
 timeOutCounter();
